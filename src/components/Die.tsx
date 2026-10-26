@@ -9,7 +9,7 @@ const PIPS: Record<number, [number, number][]> = {
 
 export function Die({
   value, size = 64, rolling, held, onClick, rollKey,
-}: { value: number; size?: number; rolling?: boolean; held?: boolean; onClick?: () => void; rollKey?: number }) {
+}: { value: number; size?: number; rolling?: boolean; held?: boolean; onClick?: (() => void) | undefined; rollKey?: number }) {
   const pip = size * 0.17;
   return (
     <button

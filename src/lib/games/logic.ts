@@ -3,7 +3,7 @@ export type Mark = "X" | "O" | null;
 export const LINES: [number, number, number][] = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
 export function tttWinner(b: Mark[]): { mark: Mark; line: number[] } | null {
-  for (const l of LINES) if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) return { mark: b[l[0]], line: l };
+  for (const l of LINES) if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) return { mark: b[l[0]] ?? null, line: l };
   return null;
 }
 

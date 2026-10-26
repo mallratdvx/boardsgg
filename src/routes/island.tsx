@@ -62,8 +62,9 @@ function Island() {
     setDie(r); setRollKey((k) => k + 1); sfx.dice();
     setMsg(t("island_rolled", { name: name(cur), n: r }));
     setTimeout(() => {
-      const target = Math.min(LAST, pos[cur] + r);
-      stepTo(pos[cur], target, cur, (p) => {
+      const from = pos[cur] ?? 0;
+      const target = Math.min(LAST, from + r);
+      stepTo(from, target, cur, (p) => {
         const finishTurn = (final: number, again = false) => {
           if (final >= LAST) { setWinner(cur); sfx.jackpot(); void celebrate(true); setBusy(false); return; }
           if (!again) setCur((c) => (c + 1) % n);
@@ -98,7 +99,7 @@ function Island() {
             </div>
           ))}
           {pos.map((p, i) => {
-            const [x, y] = PATH[p];
+            const [x, y] = PATH[p] ?? PATH[0]!;
             const off = (i - (pos.length - 1) / 2) * 1.6;
             return (
               <div

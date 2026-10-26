@@ -77,7 +77,7 @@ function Roulette() {
   const spin = () => {
     if (spinning || !totalBet) return;
     const idx = Math.floor(Math.random() * WHEEL.length);
-    const n = WHEEL[idx];
+    const n = WHEEL[idx] ?? 0;
     setResult(null); setSpinning(true);
     const wheelRot = rotation - (rotation % 360) + 360 * 4 + Math.random() * 360;
     setRotation(wheelRot);

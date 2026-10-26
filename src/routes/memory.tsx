@@ -39,16 +39,17 @@ function Memory() {
   }, [started, done]);
 
   const flip = (i: number) => {
-    if (open.length === 2 || open.includes(i) || found.has(deck[i].icon)) return;
+    const card = deck[i];
+    if (!card || open.length === 2 || open.includes(i) || found.has(card.icon)) return;
     setStarted(true);
     sfx.flip();
     const o = [...open, i];
     setOpen(o);
     if (o.length === 2) {
       setMoves((m) => m + 1);
-      if (deck[o[0]].icon === deck[o[1]].icon) {
+      if (deck[o[0]!]?.icon === deck[o[1]!]?.icon) {
         setTimeout(() => {
-          const f = new Set(found).add(deck[i].icon);
+          const f = new Set(found).add(card.icon);
           setFound(f); setOpen([]); sfx.ding();
           if (f.size === 8) { sfx.win(); void celebrate(true); }
         }, 400);
