@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlackjackRouteImport } from './routes/blackjack'
 import { Route as ConnectFourRouteImport } from './routes/connect-four'
+import { Route as SlotsRouteImport } from './routes/slots'
 import { Route as TicTacToeRouteImport } from './routes/tic-tac-toe'
 import { Route as YatzyRouteImport } from './routes/yatzy'
 
@@ -19,9 +21,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlackjackRoute = BlackjackRouteImport.update({
+  id: '/blackjack',
+  path: '/blackjack',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConnectFourRoute = ConnectFourRouteImport.update({
   id: '/connect-four',
   path: '/connect-four',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SlotsRoute = SlotsRouteImport.update({
+  id: '/slots',
+  path: '/slots',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TicTacToeRoute = TicTacToeRouteImport.update({
@@ -37,34 +49,51 @@ const YatzyRoute = YatzyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/slots': typeof SlotsRoute
   '/tic-tac-toe': typeof TicTacToeRoute
   '/yatzy': typeof YatzyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/slots': typeof SlotsRoute
   '/tic-tac-toe': typeof TicTacToeRoute
   '/yatzy': typeof YatzyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/slots': typeof SlotsRoute
   '/tic-tac-toe': typeof TicTacToeRoute
   '/yatzy': typeof YatzyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/connect-four' | '/tic-tac-toe' | '/yatzy'
+  fullPaths:
+    '/' | '/blackjack' | '/connect-four' | '/slots' | '/tic-tac-toe' | '/yatzy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/connect-four' | '/tic-tac-toe' | '/yatzy'
-  id: '__root__' | '/' | '/connect-four' | '/tic-tac-toe' | '/yatzy'
+  to:
+    '/' | '/blackjack' | '/connect-four' | '/slots' | '/tic-tac-toe' | '/yatzy'
+  id:
+    | '__root__'
+    | '/'
+    | '/blackjack'
+    | '/connect-four'
+    | '/slots'
+    | '/tic-tac-toe'
+    | '/yatzy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlackjackRoute: typeof BlackjackRoute
   ConnectFourRoute: typeof ConnectFourRoute
+  SlotsRoute: typeof SlotsRoute
   TicTacToeRoute: typeof TicTacToeRoute
   YatzyRoute: typeof YatzyRoute
 }
@@ -78,11 +107,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blackjack': {
+      id: '/blackjack'
+      path: '/blackjack'
+      fullPath: '/blackjack'
+      preLoaderRoute: typeof BlackjackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/connect-four': {
       id: '/connect-four'
       path: '/connect-four'
       fullPath: '/connect-four'
       preLoaderRoute: typeof ConnectFourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/slots': {
+      id: '/slots'
+      path: '/slots'
+      fullPath: '/slots'
+      preLoaderRoute: typeof SlotsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tic-tac-toe': {
@@ -104,7 +147,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlackjackRoute: BlackjackRoute,
   ConnectFourRoute: ConnectFourRoute,
+  SlotsRoute: SlotsRoute,
   TicTacToeRoute: TicTacToeRoute,
   YatzyRoute: YatzyRoute,
 }
