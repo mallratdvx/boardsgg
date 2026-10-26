@@ -1,4 +1,4 @@
-# Velvet Table — Minigame Parlor
+# boards.gg — Minigame Parlor
 
 A realistic game parlor website: games look like real objects on felt tables and wooden boards, with a language switcher and satisfying animations and sounds.
 
