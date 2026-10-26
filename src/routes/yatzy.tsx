@@ -49,7 +49,7 @@ function Yatzy() {
   };
 
   const pick = (cat: YatzyCat) => {
-    if (rolls === 0 || sheets[cur][cat] !== undefined) return;
+    if (rolls === 0 || sheets[cur]?.[cat] !== undefined) return;
     const s = yatzyScore(cat, dice);
     const next = sheets.map((sh, i) => (i === cur ? { ...sh, [cat]: s } : sh));
     setSheets(next);
@@ -58,7 +58,7 @@ function Yatzy() {
     if (next.every((sh) => Object.keys(sh).length === YATZY_CATS.length)) setTimeout(() => { sfx.win(); void celebrate(true); }, 300);
   };
 
-  const winner = done ? sheets.reduce((b, s, i) => (total(s) > total(sheets[b]) ? i : b), 0) : -1;
+  const winner = done ? sheets.reduce((b, s, i) => (total(s) > total(sheets[b] ?? {}) ? i : b), 0) : -1;
 
   return (
     <GameLayout
@@ -79,7 +79,7 @@ function Yatzy() {
                 value={v}
                 size={72}
                 rolling={!held[i] && rolls > 0}
-                held={held[i]}
+                held={!!held[i]}
                 onClick={rolls > 0 && rolls < 3 ? () => { setHeld((h) => h.map((x, j) => (j === i ? !x : x))); sfx.click(); } : undefined}
               />
             ))}

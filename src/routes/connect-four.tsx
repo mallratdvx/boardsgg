@@ -27,7 +27,7 @@ function ConnectFour() {
   const [vsAi, setVsAi] = useState(true);
   const [last, setLast] = useState<[number, number] | null>(null);
   const win = c4Winner(grid);
-  const full = grid[0].every(Boolean);
+  const full = grid[0]!.every(Boolean);
 
   const drop = (c: number) => {
     if (win) return;
@@ -44,6 +44,7 @@ function ConnectFour() {
       const id = setTimeout(() => drop(c4AiMove(grid)), 700);
       return () => clearTimeout(id);
     }
+    return undefined;
   });
 
   useEffect(() => {

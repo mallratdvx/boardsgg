@@ -42,7 +42,7 @@ function Taboo() {
     return () => clearTimeout(id);
   }, [running, time]);
 
-  const card = cards[order[idx % Math.max(order.length, 1)] ?? 0];
+  const card = cards[order[idx % Math.max(order.length, 1)] ?? 0] ?? cards[0]!;
   const next = (delta: number, kind: "ok" | "skip" | "bad") => {
     setScores((s) => s.map((v, i) => (i === team ? v + delta : v)));
     setRoundScore((r) => r + delta);

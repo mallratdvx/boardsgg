@@ -1,6 +1,6 @@
 // ---------- Tic Tac Toe ----------
 export type Mark = "X" | "O" | null;
-export const LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+export const LINES: [number, number, number][] = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
 export function tttWinner(b: Mark[]): { mark: Mark; line: number[] } | null {
   for (const l of LINES) if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) return { mark: b[l[0]], line: l };
@@ -37,9 +37,9 @@ export type C4Cell = 0 | 1 | 2;
 
 export function c4Drop(grid: C4Cell[][], col: number, p: 1 | 2): { grid: C4Cell[][]; row: number } | null {
   for (let r = C4_ROWS - 1; r >= 0; r--) {
-    if (grid[r][col] === 0) {
+    if (grid[r]![col] === 0) {
       const g = grid.map((row) => [...row]);
-      g[r][col] = p;
+      g[r]![col] = p;
       return { grid: g, row: r };
     }
   }
@@ -47,15 +47,15 @@ export function c4Drop(grid: C4Cell[][], col: number, p: 1 | 2): { grid: C4Cell[
 }
 
 export function c4Winner(g: C4Cell[][]): { p: 1 | 2; cells: [number, number][] } | null {
-  const dirs = [[0,1],[1,0],[1,1],[1,-1]];
+  const dirs: [number, number][] = [[0,1],[1,0],[1,1],[1,-1]];
   for (let r = 0; r < C4_ROWS; r++) for (let c = 0; c < C4_COLS; c++) {
-    const p = g[r][c];
+    const p = g[r]![c]!;
     if (!p) continue;
     for (const [dr, dc] of dirs) {
       const cells: [number, number][] = [[r, c]];
       for (let k = 1; k < 4; k++) {
         const rr = r + dr * k, cc = c + dc * k;
-        if (rr < 0 || rr >= C4_ROWS || cc < 0 || cc >= C4_COLS || g[rr][cc] !== p) break;
+        if (rr < 0 || rr >= C4_ROWS || cc < 0 || cc >= C4_COLS || g[rr]![cc] !== p) break;
         cells.push([rr, cc]);
       }
       if (cells.length === 4) return { p, cells };
@@ -65,7 +65,7 @@ export function c4Winner(g: C4Cell[][]): { p: 1 | 2; cells: [number, number][] }
 }
 
 export function c4AiMove(g: C4Cell[][]): number {
-  const valid = [...Array(C4_COLS).keys()].filter((c) => g[0][c] === 0);
+  const valid = [...Array(C4_COLS).keys()].filter((c) => g[0]![c] === 0);
   for (const p of [2, 1] as const) for (const c of valid) {
     const d = c4Drop(g, c, p);
     if (d && c4Winner(d.grid)) return c;
@@ -73,12 +73,13 @@ export function c4AiMove(g: C4Cell[][]): number {
   const pref = [3, 2, 4, 1, 5, 0, 6].filter((c) => valid.includes(c));
   // avoid giving the opponent a win directly above
   const safe = pref.filter((c) => {
-    const d = c4Drop(g, c, 2)!;
+    const d = c4Drop(g, c, 2);
+    if (!d) return false;
     const above = c4Drop(d.grid, c, 1);
     return !(above && c4Winner(above.grid));
   });
   const pool = safe.length ? safe : pref;
-  return Math.random() < 0.7 ? pool[0] : pool[Math.floor(Math.random() * pool.length)];
+  return (Math.random() < 0.7 ? pool[0] : pool[Math.floor(Math.random() * pool.length)]) ?? 3;
 }
 
 // ---------- Yatzy (Scandinavian) ----------
@@ -87,16 +88,16 @@ export type YatzyCat = (typeof YATZY_CATS)[number];
 
 export function yatzyScore(cat: YatzyCat, dice: number[]): number {
   const counts = [0,0,0,0,0,0,0];
-  dice.forEach((d) => counts[d]++);
+  dice.forEach((d) => { counts[d] = (counts[d] ?? 0) + 1; });
   const sum = dice.reduce((a, b) => a + b, 0);
-  const ofKind = (n: number) => { for (let v = 6; v >= 1; v--) if (counts[v] >= n) return v * n; return 0; };
+  const ofKind = (n: number) => { for (let v = 6; v >= 1; v--) if (counts[v]! >= n) return v * n; return 0; };
   const upper = ["ones","twos","threes","fours","fives","sixes"].indexOf(cat);
-  if (upper >= 0) return counts[upper + 1] * (upper + 1);
+  if (upper >= 0) return counts[upper + 1]! * (upper + 1);
   switch (cat) {
     case "pair": return ofKind(2);
     case "twoPairs": {
-      const pairs = [6,5,4,3,2,1].filter((v) => counts[v] >= 2);
-      return pairs.length >= 2 ? pairs[0] * 2 + pairs[1] * 2 : 0;
+      const pairs = [6,5,4,3,2,1].filter((v) => counts[v]! >= 2);
+      return pairs.length >= 2 ? pairs[0]! * 2 + pairs[1]! * 2 : 0;
     }
     case "three": return ofKind(3);
     case "four": return ofKind(4);
@@ -124,7 +125,7 @@ const SLOT_PAY: Record<string, number> = { "🍒": 5, "🍋": 8, "🔔": 12, "�
 
 export function slotPayout(reels: string[], bet: number): number {
   const [a, b, c] = reels;
-  if (a === b && b === c) return bet * SLOT_PAY[a];
+  if (a === b && b === c) return bet * (SLOT_PAY[a!] ?? 0);
   if (a === b || b === c || a === c) return bet * 2;
   if (reels.includes("🍒")) return bet;
   return 0;

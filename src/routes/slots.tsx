@@ -20,7 +20,8 @@ export const Route = createFileRoute("/slots")({
 
 const ITEM = 96;
 const WEIGHTED = ["🍒","🍒","🍒","🍋","🍋","🍋","🔔","🔔","🍇","🍇","⭐","7️⃣"];
-const strip = () => Array.from({ length: 30 }, () => SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)] as string);
+const pickOne = (arr: readonly string[]) => arr[Math.floor(Math.random() * arr.length)] ?? "🍒";
+const strip = () => Array.from({ length: 30 }, () => pickOne(SLOT_SYMBOLS));
 
 function Slots() {
   const { t } = useApp();
@@ -40,7 +41,7 @@ function Slots() {
     setMsg(null); setSpinning(true); setPulled(true); setSpinId((s) => s + 1);
     sfx.lever();
     setTimeout(() => setPulled(false), 350);
-    const result = [0, 1, 2].map(() => WEIGHTED[Math.floor(Math.random() * WEIGHTED.length)]);
+    const result = [0, 1, 2].map(() => pickOne(WEIGHTED));
     setStrips(result.map((r) => [...strip(), r]));
     ticks.current = window.setInterval(sfx.tick, 70);
     [1200, 1700, 2200].forEach((ms) => setTimeout(sfx.thud, ms));
@@ -74,11 +75,10 @@ function Slots() {
                     style={{
                       transform: `translateY(-${(s.length - 1) * ITEM}px)`,
                       transition: spinning ? `transform ${1.2 + i * 0.5}s cubic-bezier(0.15, 0.6, 0.25, 1.04)` : "none",
-                      animation: spinning ? undefined : undefined,
                     }}
                     ref={(el) => {
-                      if (el && spinning && el.dataset.spin !== String(spinId)) {
-                        el.dataset.spin = String(spinId);
+                      if (el && spinning && el.dataset["spin"] !== String(spinId)) {
+                        el.dataset["spin"] = String(spinId);
                         el.style.transition = "none";
                         el.style.transform = "translateY(0)";
                         void el.offsetHeight;

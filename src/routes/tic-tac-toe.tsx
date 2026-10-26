@@ -40,6 +40,7 @@ function TicTacToe() {
       const id = setTimeout(() => play(tttBestMove(board, "O")), 550);
       return () => clearTimeout(id);
     }
+    return undefined;
   });
 
   useEffect(() => {
