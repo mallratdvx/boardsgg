@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlackjackRouteImport } from './routes/blackjack'
 import { Route as ConnectFourRouteImport } from './routes/connect-four'
+import { Route as IslandRouteImport } from './routes/island'
 import { Route as MemoryRouteImport } from './routes/memory'
 import { Route as RouletteRouteImport } from './routes/roulette'
 import { Route as SlotsRouteImport } from './routes/slots'
@@ -32,6 +33,11 @@ const BlackjackRoute = BlackjackRouteImport.update({
 const ConnectFourRoute = ConnectFourRouteImport.update({
   id: '/connect-four',
   path: '/connect-four',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IslandRoute = IslandRouteImport.update({
+  id: '/island',
+  path: '/island',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MemoryRoute = MemoryRouteImport.update({
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blackjack'
     | '/connect-four'
+    | '/island'
     | '/memory'
     | '/roulette'
     | '/slots'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blackjack'
     | '/connect-four'
+    | '/island'
     | '/memory'
     | '/roulette'
     | '/slots'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blackjack'
     | '/connect-four'
+    | '/island'
     | '/memory'
     | '/roulette'
     | '/slots'
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BlackjackRoute: typeof BlackjackRoute
   ConnectFourRoute: typeof ConnectFourRoute
+  IslandRoute: typeof IslandRoute
   MemoryRoute: typeof MemoryRoute
   RouletteRoute: typeof RouletteRoute
   SlotsRoute: typeof SlotsRoute
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/connect-four'
       fullPath: '/connect-four'
       preLoaderRoute: typeof ConnectFourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/island': {
+      id: '/island'
+      path: '/island'
+      fullPath: '/island'
+      preLoaderRoute: typeof IslandRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/memory': {
@@ -219,6 +239,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlackjackRoute: BlackjackRoute,
   ConnectFourRoute: ConnectFourRoute,
+  IslandRoute: IslandRoute,
   MemoryRoute: MemoryRoute,
   RouletteRoute: RouletteRoute,
   SlotsRoute: SlotsRoute,
