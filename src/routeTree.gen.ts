@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlackjackRouteImport } from './routes/blackjack'
 import { Route as ConnectFourRouteImport } from './routes/connect-four'
+import { Route as MemoryRouteImport } from './routes/memory'
+import { Route as RouletteRouteImport } from './routes/roulette'
 import { Route as SlotsRouteImport } from './routes/slots'
+import { Route as TabooRouteImport } from './routes/taboo'
 import { Route as TicTacToeRouteImport } from './routes/tic-tac-toe'
 import { Route as YatzyRouteImport } from './routes/yatzy'
 
@@ -31,9 +34,24 @@ const ConnectFourRoute = ConnectFourRouteImport.update({
   path: '/connect-four',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MemoryRoute = MemoryRouteImport.update({
+  id: '/memory',
+  path: '/memory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RouletteRoute = RouletteRouteImport.update({
+  id: '/roulette',
+  path: '/roulette',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SlotsRoute = SlotsRouteImport.update({
   id: '/slots',
   path: '/slots',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TabooRoute = TabooRouteImport.update({
+  id: '/taboo',
+  path: '/taboo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TicTacToeRoute = TicTacToeRouteImport.update({
@@ -51,7 +69,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/memory': typeof MemoryRoute
+  '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
+  '/taboo': typeof TabooRoute
   '/tic-tac-toe': typeof TicTacToeRoute
   '/yatzy': typeof YatzyRoute
 }
@@ -59,7 +80,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/memory': typeof MemoryRoute
+  '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
+  '/taboo': typeof TabooRoute
   '/tic-tac-toe': typeof TicTacToeRoute
   '/yatzy': typeof YatzyRoute
 }
@@ -68,23 +92,45 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/blackjack': typeof BlackjackRoute
   '/connect-four': typeof ConnectFourRoute
+  '/memory': typeof MemoryRoute
+  '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
+  '/taboo': typeof TabooRoute
   '/tic-tac-toe': typeof TicTacToeRoute
   '/yatzy': typeof YatzyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/blackjack' | '/connect-four' | '/slots' | '/tic-tac-toe' | '/yatzy'
+    | '/'
+    | '/blackjack'
+    | '/connect-four'
+    | '/memory'
+    | '/roulette'
+    | '/slots'
+    | '/taboo'
+    | '/tic-tac-toe'
+    | '/yatzy'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/blackjack' | '/connect-four' | '/slots' | '/tic-tac-toe' | '/yatzy'
+    | '/'
+    | '/blackjack'
+    | '/connect-four'
+    | '/memory'
+    | '/roulette'
+    | '/slots'
+    | '/taboo'
+    | '/tic-tac-toe'
+    | '/yatzy'
   id:
     | '__root__'
     | '/'
     | '/blackjack'
     | '/connect-four'
+    | '/memory'
+    | '/roulette'
     | '/slots'
+    | '/taboo'
     | '/tic-tac-toe'
     | '/yatzy'
   fileRoutesById: FileRoutesById
@@ -93,7 +139,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BlackjackRoute: typeof BlackjackRoute
   ConnectFourRoute: typeof ConnectFourRoute
+  MemoryRoute: typeof MemoryRoute
+  RouletteRoute: typeof RouletteRoute
   SlotsRoute: typeof SlotsRoute
+  TabooRoute: typeof TabooRoute
   TicTacToeRoute: typeof TicTacToeRoute
   YatzyRoute: typeof YatzyRoute
 }
@@ -121,11 +170,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnectFourRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/memory': {
+      id: '/memory'
+      path: '/memory'
+      fullPath: '/memory'
+      preLoaderRoute: typeof MemoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roulette': {
+      id: '/roulette'
+      path: '/roulette'
+      fullPath: '/roulette'
+      preLoaderRoute: typeof RouletteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/slots': {
       id: '/slots'
       path: '/slots'
       fullPath: '/slots'
       preLoaderRoute: typeof SlotsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/taboo': {
+      id: '/taboo'
+      path: '/taboo'
+      fullPath: '/taboo'
+      preLoaderRoute: typeof TabooRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tic-tac-toe': {
@@ -149,7 +219,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlackjackRoute: BlackjackRoute,
   ConnectFourRoute: ConnectFourRoute,
+  MemoryRoute: MemoryRoute,
+  RouletteRoute: RouletteRoute,
   SlotsRoute: SlotsRoute,
+  TabooRoute: TabooRoute,
   TicTacToeRoute: TicTacToeRoute,
   YatzyRoute: YatzyRoute,
 }
