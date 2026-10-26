@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ConnectFourRouteImport } from './routes/connect-four'
+import { Route as TicTacToeRouteImport } from './routes/tic-tac-toe'
+import { Route as YatzyRouteImport } from './routes/yatzy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConnectFourRoute = ConnectFourRouteImport.update({
+  id: '/connect-four',
+  path: '/connect-four',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TicTacToeRoute = TicTacToeRouteImport.update({
+  id: '/tic-tac-toe',
+  path: '/tic-tac-toe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const YatzyRoute = YatzyRouteImport.update({
+  id: '/yatzy',
+  path: '/yatzy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/connect-four': typeof ConnectFourRoute
+  '/tic-tac-toe': typeof TicTacToeRoute
+  '/yatzy': typeof YatzyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/connect-four': typeof ConnectFourRoute
+  '/tic-tac-toe': typeof TicTacToeRoute
+  '/yatzy': typeof YatzyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/connect-four': typeof ConnectFourRoute
+  '/tic-tac-toe': typeof TicTacToeRoute
+  '/yatzy': typeof YatzyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/connect-four' | '/tic-tac-toe' | '/yatzy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/connect-four' | '/tic-tac-toe' | '/yatzy'
+  id: '__root__' | '/' | '/connect-four' | '/tic-tac-toe' | '/yatzy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConnectFourRoute: typeof ConnectFourRoute
+  TicTacToeRoute: typeof TicTacToeRoute
+  YatzyRoute: typeof YatzyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/connect-four': {
+      id: '/connect-four'
+      path: '/connect-four'
+      fullPath: '/connect-four'
+      preLoaderRoute: typeof ConnectFourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tic-tac-toe': {
+      id: '/tic-tac-toe'
+      path: '/tic-tac-toe'
+      fullPath: '/tic-tac-toe'
+      preLoaderRoute: typeof TicTacToeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/yatzy': {
+      id: '/yatzy'
+      path: '/yatzy'
+      fullPath: '/yatzy'
+      preLoaderRoute: typeof YatzyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConnectFourRoute: ConnectFourRoute,
+  TicTacToeRoute: TicTacToeRoute,
+  YatzyRoute: YatzyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
