@@ -1,11 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { DICTS, LANGS, type Dict, type Lang } from "./dict";
+import { EXTRA, type XKey } from "./extra";
 import { setMuted } from "../sound";
 
+export type TKey = keyof Dict | XKey;
 type Ctx = {
   lang: Lang;
   setLang: (l: Lang) => void;
-  t: (key: keyof Dict, vars?: Record<string, string | number>) => string;
+  t: (key: TKey, vars?: Record<string, string | number>) => string;
   muted: boolean;
   toggleMute: () => void;
 };
@@ -47,8 +49,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const t = useCallback(
-    (key: keyof Dict, vars?: Record<string, string | number>) => {
-      let s = DICTS[lang][key] ?? DICTS.en[key];
+    (key: keyof Dict | XKey, vars?: Record<string, string | number>) => {
+      const d = DICTS[lang] as Record<string, string>;
+      const x = EXTRA[lang] as Record<string, string>;
+      let s = d[key] ?? x[key] ?? (EXTRA.en as Record<string, string>)[key] ?? String(key);
       if (vars) for (const [k, v] of Object.entries(vars)) s = s.replace(`{${k}}`, String(v));
       return s;
     },

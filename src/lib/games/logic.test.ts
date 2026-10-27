@@ -50,14 +50,19 @@ describe("yatzy", () => {
 describe("payouts", () => {
   it("slots", () => {
     expect(slotPayout(["7️⃣","7️⃣","7️⃣"], 10)).toBe(1000);
-    expect(slotPayout(["🍋","🍋","🔔"], 10)).toBe(20);
-    expect(slotPayout(["🍒","🍋","🔔"], 10)).toBe(10);
-    expect(slotPayout(["🍇","🍋","🔔"], 10)).toBe(0);
+    expect(slotPayout(["lemon","lemon","bell"], 10)).toBe(20);
+    expect(slotPayout(["cherry","lemon","bell"], 10)).toBe(10);
+    expect(slotPayout(["grape","lemon","bell"], 10)).toBe(0);
   });
-  it("roulette", () => {
-    expect(rouletteWin("n:17", 17)).toBe(36);
+  it("mini roulette la partage", () => {
+    expect(rouletteWin("n:7", 7)).toBe(12);
+    expect(rouletteWin("n:7", 8)).toBe(0);
     expect(rouletteWin("red", 1)).toBe(2);
-    expect(rouletteWin("red", 0)).toBe(0);
-    expect(rouletteWin("even", 0)).toBe(0);
+    expect(rouletteWin("black", 1)).toBe(0);
+    expect(rouletteWin("red", 0)).toBe(0.5);
+    expect(rouletteWin("even", 0)).toBe(0.5);
+    expect(rouletteWin("n:0", 0)).toBe(12);
+    expect(rouletteWin("low", 6)).toBe(2);
+    expect(rouletteWin("high", 7)).toBe(2);
   });
 });

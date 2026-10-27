@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
 import { useApp } from "@/lib/i18n/context";
-import { LANGS, LANG_FLAGS, LANG_LABELS } from "@/lib/i18n/dict";
+import { LANGS, LANG_LABELS } from "@/lib/i18n/dict";
 import { sfx } from "@/lib/sound";
 
 export function Header() {
@@ -26,8 +26,7 @@ export function Header() {
           </button>
           <div className="relative">
             <button onClick={() => { setOpen((o) => !o); sfx.click(); }} className="btn-real" aria-label="Language">
-              <span className="text-lg">{LANG_FLAGS[lang]}</span>
-              <span className="uppercase">{lang}</span>
+                            <span className="uppercase">{lang}</span>
             </button>
             {open && (
               <ul className="paper animate-pop absolute right-0 mt-3 w-44 overflow-hidden rounded-lg py-1">
@@ -37,7 +36,7 @@ export function Header() {
                       onClick={() => { setLang(l); setOpen(false); sfx.chip(); }}
                       className={`flex w-full items-center gap-3 px-4 py-2 text-left font-semibold hover:bg-brass/30 ${l === lang ? "bg-brass/40" : ""}`}
                     >
-                      <span className="text-lg">{LANG_FLAGS[l]}</span>
+                      <span className="brass-plate rounded px-1.5 text-xs font-black uppercase">{l}</span>
                       {LANG_LABELS[l]}
                     </button>
                   </li>

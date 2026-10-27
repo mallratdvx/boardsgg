@@ -1,7 +1,6 @@
 export const LANGS = ["en", "de", "es", "fr", "it"] as const;
 export type Lang = (typeof LANGS)[number];
 export const LANG_LABELS: Record<Lang, string> = { en: "English", de: "Deutsch", es: "Español", fr: "Français", it: "Italiano" };
-export const LANG_FLAGS: Record<Lang, string> = { en: "🇬🇧", de: "🇩🇪", es: "🇪🇸", fr: "🇫🇷", it: "🇮🇹" };
 
 const en = {
   tagline: "A parlor of classic games, on a table near you.",

@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-sans: "Libre Franklin", system-ui, sans-serif;
+  --font-display: "Cinzel", "Trajan Pro", Georgia, serif;
+  --font-sans: "Cormorant Garamond", Georgia, serif;
   --font-chalk: "Caveat", cursive;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -94,7 +94,9 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
   }
-  h1, h2, h3 { font-family: var(--font-display); }
+  h1, h2, h3 { font-family: var(--font-display); letter-spacing: 0.04em; }
+  body { font-size: 1.125rem; font-weight: 500; }
+  button { font-family: var(--font-display); letter-spacing: 0.04em; }
 }
 
 /* ---------- Materials ---------- */

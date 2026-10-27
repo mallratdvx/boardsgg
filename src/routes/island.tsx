@@ -1,3 +1,4 @@
+import { Anchor, Crown, Dices, Gem, Skull, User, Wind } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Banner, GameLayout } from "@/components/GameLayout";
@@ -28,7 +29,7 @@ const PATH: [number, number][] = [
 const LAST = PATH.length - 1;
 const SPECIAL: Record<number, "boost" | "trap" | "treasure"> = { 4: "boost", 8: "trap", 12: "treasure", 16: "boost", 19: "trap", 22: "treasure", 25: "trap", 27: "boost" };
 const PAWN = ["bg-chip-red", "bg-chip-blue", "bg-brass", "bg-chip-green"];
-const ICON = { boost: "💨", trap: "🌀", treasure: "💎" };
+const ICON = { boost: <Wind className="h-3/5 w-3/5" />, trap: <Skull className="h-3/5 w-3/5" />, treasure: <Gem className="h-3/5 w-3/5" /> };
 
 function Island() {
   const { t } = useApp();
@@ -83,7 +84,7 @@ function Island() {
     <GameLayout
       title="g_island"
       actions={[2, 3, 4].map((k) => (
-        <button key={k} className={`btn-real ${n === k ? "" : "btn-dark"}`} onClick={() => start(k)} disabled={busy}>{k} 👤</button>
+        <button key={k} className={`btn-real ${n === k ? "" : "btn-dark"}`} onClick={() => start(k)} disabled={busy}>{k} <User className="h-4 w-4" /></button>
       ))}
     >
       <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
@@ -95,7 +96,7 @@ function Island() {
               className={`absolute grid h-[5.5%] w-[5.5%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full text-[10px] font-black md:text-sm ${i === LAST ? "brass-plate !h-[9%] !w-[9%]" : "paper"}`}
               style={{ left: `${x}%`, top: `${y}%`, boxShadow: "0 3px 0 oklch(0 0 0 / 0.35), inset 0 -2px 0 oklch(0 0 0 / 0.15)" }}
             >
-              {i === LAST ? <span className="text-xl md:text-3xl">🧰</span> : i === 0 ? "⚓" : SPECIAL[i] ? ICON[SPECIAL[i]] : i}
+              {i === LAST ? <Crown className="h-3/5 w-3/5" /> : i === 0 ? <Anchor className="h-3/5 w-3/5" /> : SPECIAL[i] ? ICON[SPECIAL[i]] : i}
             </div>
           ))}
           {pos.map((p, i) => {
@@ -133,7 +134,7 @@ function Island() {
           {winner >= 0 ? (
             <button className="btn-real px-10" onClick={() => start(n)}>{t("again")}</button>
           ) : (
-            <button className="btn-real btn-red px-10 py-4 text-xl" onClick={roll} disabled={busy}>🎲 {t("roll")}</button>
+            <button className="btn-real btn-red px-10 py-4 text-xl" onClick={roll} disabled={busy}><Dices className="inline h-5 w-5" /> {t("roll")}</button>
           )}
           <p className="text-sm text-ivory/80">{winner < 0 && t("turn", { name: name(cur) })}</p>
         </div>

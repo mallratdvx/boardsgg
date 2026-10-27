@@ -1,3 +1,4 @@
+import { Dices, User } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Banner, GameLayout } from "@/components/GameLayout";
@@ -64,7 +65,7 @@ function Yatzy() {
     <GameLayout
       title="g_yatzy"
       actions={[1, 2, 3, 4].map((n) => (
-        <button key={n} className={`btn-real ${count === n ? "" : "btn-dark"}`} onClick={() => start(n)}>{n} 👤</button>
+        <button key={n} className={`btn-real ${count === n ? "" : "btn-dark"}`} onClick={() => start(n)}>{n} <User className="h-4 w-4" /></button>
       ))}
     >
       <div className="grid gap-8 lg:grid-cols-[1fr_auto]">
@@ -86,7 +87,7 @@ function Yatzy() {
           </div>
           <p className="text-sm text-ivory/80">{rolls > 0 && rolls < 3 ? t("holdHint") : "\u00a0"}</p>
           <button className="btn-real btn-red px-10 py-4 text-xl" disabled={rolls >= 3 || done} onClick={roll}>
-            🎲 {t("roll")} <span className="text-sm opacity-80">({3 - rolls})</span>
+            <Dices className="h-5 w-5" /> {t("roll")} <span className="text-sm opacity-80">({3 - rolls})</span>
           </button>
         </div>
 

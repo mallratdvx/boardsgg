@@ -4,6 +4,8 @@ import { GameLayout } from "@/components/GameLayout";
 import { useApp } from "@/lib/i18n/context";
 import { SLOT_SYMBOLS, slotPayout } from "@/lib/games/logic";
 import { sfx } from "@/lib/sound";
+import { SlotSymbol } from "@/components/SlotSymbol";
+import { Coins } from "lucide-react";
 import { celebrate } from "@/lib/celebrate";
 
 export const Route = createFileRoute("/slots")({
@@ -19,15 +21,15 @@ export const Route = createFileRoute("/slots")({
 });
 
 const ITEM = 96;
-const WEIGHTED = ["🍒","🍒","🍒","🍋","🍋","🍋","🔔","🔔","🍇","🍇","⭐","7️⃣"];
-const pickOne = (arr: readonly string[]) => arr[Math.floor(Math.random() * arr.length)] ?? "🍒";
+const WEIGHTED = ["cherry","cherry","cherry","lemon","lemon","lemon","bell","bell","grape","grape","star","seven"];
+const pickOne = (arr: readonly string[]) => arr[Math.floor(Math.random() * arr.length)] ?? "cherry";
 const strip = () => Array.from({ length: 30 }, () => pickOne(SLOT_SYMBOLS));
 
 function Slots() {
   const { t } = useApp();
   const [coins, setCoins] = useState(200);
   const [bet, setBet] = useState(5);
-  const [strips, setStrips] = useState<string[][]>(() => [["7️⃣"], ["7️⃣"], ["7️⃣"]]);
+  const [strips, setStrips] = useState<string[][]>(() => [["seven"], ["seven"], ["seven"]]);
   const [spinning, setSpinning] = useState(false);
   const [pulled, setPulled] = useState(false);
   const [msg, setMsg] = useState<{ text: string; big?: boolean } | null>(null);
@@ -39,12 +41,12 @@ function Slots() {
     if (coins < bet) { setCoins(200); setMsg({ text: t("broke") }); return; }
     setCoins((c) => c - bet);
     setMsg(null); setSpinning(true); setPulled(true); setSpinId((s) => s + 1);
-    sfx.lever();
+    sfx.slotPull();
     setTimeout(() => setPulled(false), 350);
     const result = [0, 1, 2].map(() => pickOne(WEIGHTED));
     setStrips(result.map((r) => [...strip(), r]));
-    ticks.current = window.setInterval(sfx.tick, 70);
-    [1200, 1700, 2200].forEach((ms) => setTimeout(sfx.thud, ms));
+    ticks.current = window.setInterval(sfx.slotTick, 70);
+    [1200, 1700, 2200].forEach((ms) => setTimeout(sfx.slotStop, ms));
     setTimeout(() => {
       if (ticks.current) clearInterval(ticks.current);
       setSpinning(false);
@@ -52,14 +54,14 @@ function Slots() {
       if (win > 0) {
         setCoins((c) => c + win);
         const jack = result.every((r) => r === result[0]);
-        setMsg({ text: jack && result[0] === "7️⃣" ? `${t("jackpot")} +${win}` : t("winAmount", { n: win }), big: jack });
-        if (jack) { sfx.jackpot(); void celebrate(true); } else { sfx.win(); }
+        setMsg({ text: jack && result[0] === "seven" ? `${t("jackpot")} +${win}` : t("winAmount", { n: win }), big: jack });
+        if (jack) { sfx.jackpot(); void celebrate(true); } else { sfx.slotWin(); }
       } else { setMsg({ text: t("noWin") }); }
     }, 2300);
   };
 
   return (
-    <GameLayout title="g_slots" actions={<div className="brass-plate rounded-md px-4 py-2 font-black">🪙 {coins}</div>}>
+    <GameLayout title="g_slots" actions={<div className="brass-plate rounded-md px-4 py-2 font-black flex items-center gap-2"><Coins className="h-5 w-5" /> {coins}</div>}>
       <div className="mx-auto flex max-w-2xl items-center justify-center gap-2">
         <div className="relative w-full max-w-lg rounded-[2rem] btn-red p-5 md:p-8" style={{ boxShadow: "inset 0 4px 0 oklch(1 0 0 / 0.3), inset 0 -10px 0 oklch(0 0 0 / 0.3), 0 30px 60px -10px oklch(0 0 0 / 0.8)" }}>
           <div className="brass-plate mb-5 rounded-xl py-2 text-center font-display text-3xl font-black tracking-widest">
@@ -88,7 +90,7 @@ function Slots() {
                     }}
                   >
                     {s.map((sym, j) => (
-                      <div key={j} className="grid shrink-0 place-items-center text-5xl" style={{ height: ITEM }}>{sym}</div>
+                      <div key={j} className="grid shrink-0 place-items-center" style={{ height: ITEM }}><SlotSymbol s={sym} size={68} /></div>
                     ))}
                   </div>
                 </div>
@@ -106,8 +108,9 @@ function Slots() {
             <button className="btn-real px-8 text-lg" onClick={spin} disabled={spinning}>{t("spin")}</button>
           </div>
           <div className="mt-5 grid grid-cols-3 gap-1 rounded-md bg-ink/60 p-2 text-center text-xs text-ivory">
-            <span>7️⃣7️⃣7️⃣ ×100</span><span>⭐⭐⭐ ×25</span><span>🍇🍇🍇 ×15</span>
-            <span>🔔🔔🔔 ×12</span><span>🍋🍋🍋 ×8</span><span>🍒🍒🍒 ×5</span>
+            {(["seven", "star", "grape", "bell", "lemon", "cherry"] as const).map((k, i) => (
+              <span key={k} className="flex items-center justify-center gap-1"><SlotSymbol s={k} size={20} /><SlotSymbol s={k} size={20} /><SlotSymbol s={k} size={20} /> ×{[100, 25, 15, 12, 8, 5][i]}</span>
+            ))}
           </div>
         </div>
         {/* Lever */}
