@@ -120,32 +120,34 @@ export function yatzyBonus(sheet: Partial<Record<YatzyCat, number>>): number {
 }
 
 // ---------- Slots ----------
-export const SLOT_SYMBOLS = ["🍒", "🍋", "🔔", "🍇", "⭐", "7️⃣"] as const;
-const SLOT_PAY: Record<string, number> = { "🍒": 5, "🍋": 8, "🔔": 12, "🍇": 15, "⭐": 25, "7️⃣": 100 };
+export const SLOT_SYMBOLS = ["cherry", "lemon", "bell", "grape", "star", "seven"] as const;
+export type SlotSym = (typeof SLOT_SYMBOLS)[number];
+export const SLOT_PAY: Record<string, number> = { cherry: 5, lemon: 8, bell: 12, grape: 15, star: 25, seven: 100 };
 
 export function slotPayout(reels: string[], bet: number): number {
   const [a, b, c] = reels;
   if (a === b && b === c) return bet * (SLOT_PAY[a!] ?? 0);
   if (a === b || b === c || a === c) return bet * 2;
-  if (reels.includes("🍒")) return bet;
+  if (reels.includes("cherry")) return bet;
   return 0;
 }
 
-// ---------- Roulette (European) ----------
-export const WHEEL = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-const REDS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+// ---------- Mini Roulette (0-12, la partage) ----------
+export const WHEEL = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5, 12];
+const REDS = new Set([1, 3, 5, 8, 10, 12]);
 export const rouletteColor = (n: number): "red" | "black" | "green" => (n === 0 ? "green" : REDS.has(n) ? "red" : "black");
 
-export type RBet = string; // "n:17" | "red" | "black" | "even" | "odd" | "low" | "high"
+export type RBet = string; // "n:7" | "red" | "black" | "even" | "odd" | "low" | "high"
+/** Total returned per unit staked (stake included). Straight 11:1, outside 1:1, zero refunds half of outside bets. */
 export function rouletteWin(bet: RBet, n: number): number {
-  if (bet.startsWith("n:")) return Number(bet.slice(2)) === n ? 36 : 0;
-  if (n === 0) return 0;
+  if (bet.startsWith("n:")) return Number(bet.slice(2)) === n ? 12 : 0;
+  if (n === 0) return 0.5;
   const ok =
     (bet === "red" && rouletteColor(n) === "red") ||
     (bet === "black" && rouletteColor(n) === "black") ||
     (bet === "even" && n % 2 === 0) ||
     (bet === "odd" && n % 2 === 1) ||
-    (bet === "low" && n <= 18) ||
-    (bet === "high" && n >= 19);
+    (bet === "low" && n <= 6) ||
+    (bet === "high" && n >= 7);
   return ok ? 2 : 0;
 }

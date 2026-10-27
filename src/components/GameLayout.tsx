@@ -2,9 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
 import { useApp } from "@/lib/i18n/context";
-import type { Dict } from "@/lib/i18n/dict";
+import type { TKey } from "@/lib/i18n/context";
 
-export function GameLayout({ title, children, actions }: { title: keyof Dict; children: ReactNode; actions?: ReactNode }) {
+export function GameLayout({ title, children, actions }: { title: TKey; children: ReactNode; actions?: ReactNode }) {
   const { t } = useApp();
   return (
     <main className="mx-auto max-w-6xl px-4 py-6">
