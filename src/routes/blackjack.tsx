@@ -1,3 +1,4 @@
+import { Coins } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Banner, GameLayout } from "@/components/GameLayout";
@@ -81,7 +82,7 @@ function Blackjack() {
   const msg: Record<string, string> = { blackjack: t("blackjack"), win: t("youWin"), push: t("push"), lose: t("youLose"), bust: t("bust"), broke: t("broke") };
 
   return (
-    <GameLayout title="g_blackjack" actions={<div className="brass-plate rounded-md px-4 py-2 font-black">🪙 {coins}</div>}>
+    <GameLayout title="g_blackjack" actions={<div className="brass-plate rounded-md px-4 py-2 font-black flex items-center gap-2"><Coins className="h-5 w-5" /> {coins}</div>}>
       <div className="felt table-rail relative flex min-h-[560px] flex-col items-center justify-between gap-6 rounded-[3rem_3rem_10rem_10rem] p-6 md:p-10">
         <div className="text-center">
           <p className="mb-2 font-display text-lg text-brass">{t("dealer")} {phase !== "bet" && `· ${phase === "done" ? handValue(dealer) : "?"}`}</p>

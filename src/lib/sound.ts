@@ -62,8 +62,15 @@ export const sfx = {
   ding: () => { tone(1320, 0.4, "sine", 0.2); tone(1760, 0.5, "sine", 0.12, 0.08); },
   lose: () => { tone(392, 0.25, "triangle", 0.2); tone(330, 0.25, "triangle", 0.2, 0.2); tone(262, 0.5, "triangle", 0.2, 0.4); },
   win: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.3, "triangle", 0.2, i * 0.11)),
+  // Slot machine: classic square/saw oscillator voice.
+  slotPull: () => { tone(110, 0.35, "sawtooth", 0.12, 0, 55); noise(0.25, 0.15, 0, 700); tone(220, 0.08, "square", 0.06, 0.35); },
+  slotTick: () => tone(120 + Math.random() * 120, 0.03, "square", 0.05),
+  slotStop: () => { tone(90, 0.12, "square", 0.15, 0, 60); tone(180, 0.06, "sawtooth", 0.08); },
+  slotWin: () => [523, 659, 784].forEach((f, i) => { tone(f, 0.18, "square", 0.08, i * 0.1); tone(f * 1.005, 0.18, "sawtooth", 0.05, i * 0.1); }),
+  pageFlip: () => { noise(0.25, 0.25, 0, 3000); noise(0.12, 0.2, 0.18, 1800); },
+  clock: () => { tone(800, 0.03, "square", 0.08); noise(0.05, 0.4, 0, 1200); },
   jackpot: () => {
-    [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, 0.25, "square", 0.1, i * 0.1));
+    [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => { tone(f, 0.25, "square", 0.1, i * 0.1); tone(f * 1.01, 0.25, "sawtooth", 0.06, i * 0.1); });
     for (let i = 0; i < 14; i++) tone(2400 + Math.random() * 800, 0.06, "triangle", 0.06, 0.8 + i * 0.07);
   },
 };

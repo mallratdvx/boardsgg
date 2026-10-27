@@ -18,7 +18,16 @@ export const Route = createFileRoute("/memory")({
   component: Memory,
 });
 
-const ICONS = ["🦊", "🐙", "🦉", "🐢", "🦋", "🐳", "🦁", "🐸", "🦜", "🐝"];
+import eiffel from "@/assets/mem/eiffel.jpg";
+import colosseum from "@/assets/mem/colosseum.jpg";
+import fox from "@/assets/mem/fox.jpg";
+import horse from "@/assets/mem/horse.jpg";
+import owl from "@/assets/mem/owl.jpg";
+import pisa from "@/assets/mem/pisa.jpg";
+import robot from "@/assets/mem/robot.jpg";
+import turtle from "@/assets/mem/turtle.jpg";
+
+const ICONS = [eiffel, colosseum, fox, horse, owl, pisa, robot, turtle];
 const makeDeck = () => shuffle([...ICONS.slice(0, 8), ...ICONS.slice(0, 8)]).map((icon, id) => ({ id, icon }));
 
 function Memory() {
@@ -65,11 +74,11 @@ function Memory() {
       actions={
         <>
           <div className="brass-plate rounded-md px-4 py-2 font-bold">{t("moves")}: {moves}</div>
-          <div className="brass-plate rounded-md px-4 py-2 font-bold">⏱ {Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}</div>
+          <div className="brass-plate rounded-md px-4 py-2 font-bold">{Math.floor(time / 60)}:{String(time % 60).padStart(2, "0")}</div>
         </>
       }
     >
-      <div className="mb-4 h-12">{done && <Banner>🎉 {t("moves")}: {moves}</Banner>}</div>
+      <div className="mb-4 h-12">{done && <Banner>{t("moves")}: {moves}</Banner>}</div>
       <div className="felt table-rail mx-auto grid max-w-2xl grid-cols-4 gap-3 rounded-3xl p-6 md:gap-4" style={{ perspective: 900 }}>
         {deck.map((c, i) => {
           const up = open.includes(i) || found.has(c.icon);
@@ -82,10 +91,10 @@ function Memory() {
             >
               <div className="card-back absolute inset-0" style={{ backfaceVisibility: "hidden" }} />
               <div
-                className={`card-face absolute inset-0 grid place-items-center text-4xl md:text-6xl ${found.has(c.icon) ? "opacity-80 ring-4 ring-brass" : ""}`}
+                className={`card-face absolute inset-0 p-1.5 pb-4 ${found.has(c.icon) ? "ring-4 ring-brass" : ""}`}
                 style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
               >
-                {c.icon}
+                <img src={c.icon} alt="" loading="lazy" width={816} height={816} className="h-full w-full rounded-sm object-cover sepia-[.15]" style={{ boxShadow: "inset 0 0 0 1px oklch(0 0 0 / 0.2)" }} />
               </div>
             </button>
           );
