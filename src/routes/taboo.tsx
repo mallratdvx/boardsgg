@@ -31,6 +31,10 @@ function Taboo() {
   const [running, setRunning] = useState(false);
   const [roundScore, setRoundScore] = useState(0);
   const [flash, setFlash] = useState<"ok" | "bad" | null>(null);
+  const [skips, setSkips] = useState(3);
+  const [names, setNames] = useState(["", ""]);
+  const [handoff, setHandoff] = useState<string | null>(null);
+  const teamName = (i: number) => names[i]?.trim() || t("team", { n: i + 1 });
   const cards = TABOO[lang];
 
   useEffect(() => { setOrder(shuffle(cards.map((_, i) => i))); setIdx(0); }, [lang]);
@@ -44,6 +48,14 @@ function Taboo() {
 
   const card = cards[order[idx % Math.max(order.length, 1)] ?? 0] ?? cards[0]!;
   const next = (delta: number, kind: "ok" | "skip" | "bad") => {
+    if (kind === "skip") { if (skips <= 0) return; setSkips((k) => k - 1); }
+    if (kind === "bad") {
+      setScores((s) => s.map((v, i) => (i === team ? v + delta : v)));
+      setIdx((i) => i + 1); setRunning(false); sfx.buzzer();
+      setHandoff(t("tabooPass", { name: teamName(1 - team) }));
+      setTeam((x) => 1 - x); setTime(ROUND); setRoundScore(0);
+      return;
+    }
     setScores((s) => s.map((v, i) => (i === team ? v + delta : v)));
     setRoundScore((r) => r + delta);
     setIdx((i) => i + 1);
@@ -52,7 +64,7 @@ function Taboo() {
     if (kind === "ok") sfx.ding(); else if (kind === "bad") sfx.buzzer(); else sfx.card();
   };
 
-  const start = () => { setTime(ROUND); setRoundScore(0); setRunning(true); sfx.click(); };
+  const start = () => { setHandoff(null); setTime(ROUND); setRoundScore(0); setSkips(3); setRunning(true); sfx.click(); };
   const nextTeam = () => {
     if (roundScore > 0) void celebrate();
     setTeam((t) => 1 - t); setTime(ROUND); setRoundScore(0); sfx.chip();
@@ -64,12 +76,12 @@ function Taboo() {
     <GameLayout
       title="g_taboo"
       actions={[0, 1].map((i) => (
-        <div key={i} className={`rounded-md px-4 py-2 font-bold ${i === team ? "brass-plate" : "btn-dark"}`}>{t("team", { n: i + 1 })}: {scores[i]}</div>
+        <div key={i} className={`rounded-md px-4 py-2 font-bold ${i === team ? "brass-plate" : "btn-dark"}`}>{teamName(i)}: {scores[i]}</div>
       ))}
     >
       <div className="grid items-center gap-10 md:grid-cols-[1fr_auto]">
         <div className="flex flex-col items-center gap-6">
-          <p className="text-xl font-bold text-ivory">{t("turn", { name: t("team", { n: team + 1 }) })}</p>
+          <p className="text-xl font-bold text-ivory">{t("turn", { name: teamName(team) })}</p>
           {running ? (
             <div
               key={idx}
@@ -96,16 +108,25 @@ function Taboo() {
                     <button className="btn-real mt-4" onClick={nextTeam}>{t("next")}</button>
                   </>
                 ) : (
-                  <button className="btn-real px-8 py-3 text-lg" onClick={start}>{t("start")}</button>
+                  <div className="flex flex-col items-center gap-3">
+                    {handoff && <p className="text-lg font-black text-chip-red">{handoff}</p>}
+                    {!handoff && [0, 1].map((i) => (
+                      <input key={i} value={names[i]} maxLength={18} placeholder={t("teamName", { n: i + 1 })}
+                        onChange={(e) => setNames((ns) => ns.map((v, j) => (j === i ? e.target.value : v)))}
+                        className="w-56 border-b-2 border-dashed border-ink/40 bg-transparent px-2 py-1 text-center font-display text-lg outline-none focus:border-chip-red" />
+                    ))}
+                    <p className="text-sm italic">{t("passTo", { name: teamName(team) })}</p>
+                    <button className="btn-real px-8 py-3 text-lg" onClick={start}>{handoff ? t("ready") : t("start")}</button>
+                  </div>
                 )}
               </div>
             </div>
           )}
           {running && (
             <div className="flex flex-wrap justify-center gap-3">
-              <button className="btn-real btn-red" onClick={() => next(-1, "bad")}>🔔 {t("taboo")}</button>
-              <button className="btn-real btn-dark" onClick={() => next(0, "skip")}>{t("skip")}</button>
-              <button className="btn-real px-8" onClick={() => next(1, "ok")}>✓ {t("correct")}</button>
+              <button className="btn-real btn-red" onClick={() => next(-1, "bad")}>{t("taboo")}</button>
+              <button className="btn-real btn-dark" disabled={skips <= 0} onClick={() => next(0, "skip")}>{t("skip")} · {skips}</button>
+              <button className="btn-real px-8" onClick={() => next(1, "ok")}>{t("correct")}</button>
             </div>
           )}
           {flash === "ok" && <Banner>+1</Banner>}

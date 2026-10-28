@@ -1,7 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Castle, Cherry, CircleDot, Dices, Disc3, Grid3x3, Images, Map as MapIcon, MessageSquareOff, PenLine, Spade } from "lucide-react";
 import { useApp } from "@/lib/i18n/context";
-import { GAMES } from "@/lib/games/registry";
+import { GAMES, type TrayIcon } from "@/lib/games/registry";
 import { sfx } from "@/lib/sound";
+
+const GLYPH = { grid: Grid3x3, disc: CircleDot, dice: Dices, map: MapIcon, hush: MessageSquareOff, photo: Images, spade: Spade, wheel: Disc3, reel: Cherry, king: Castle, pencil: PenLine } as const;
+function TrayGlyph({ icon }: { icon: TrayIcon }) {
+  const I = GLYPH[icon];
+  return <I className="h-8 w-8 drop-shadow-[0_2px_1px_oklch(0_0_0/0.7)]" strokeWidth={2.2} />;
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,7 +55,11 @@ function Index() {
               style={{ boxShadow: "var(--shadow-object), inset 0 0 0 3px oklch(1 0 0 / 0.15), inset 0 -10px 0 oklch(0 0 0 / 0.18)" }}
             >
               <div className="flex items-start justify-between">
-                <span className="text-5xl drop-shadow-lg transition-transform duration-300 group-hover:scale-110">{g.icon}</span>
+                <span className="wood grid h-16 w-16 place-items-center rounded-md p-1.5" style={{ boxShadow: "inset 0 2px 4px oklch(0 0 0 / 0.6), 0 3px 0 oklch(0 0 0 / 0.3)" }}>
+                  <span className="felt grid h-full w-full place-items-center rounded-sm text-brass transition-transform duration-300 group-hover:scale-110" style={{ boxShadow: "inset 0 3px 6px oklch(0 0 0 / 0.6)" }}>
+                    <TrayGlyph icon={g.icon} />
+                  </span>
+                </span>
                 <span className="brass-plate rounded px-2 py-0.5 text-xs font-bold uppercase">{t("play")}</span>
               </div>
               <div>
