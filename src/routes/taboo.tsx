@@ -75,21 +75,26 @@ function Taboo() {
   return (
     <GameLayout
       title="g_taboo"
-      actions={[0, 1].map((i) => (
-        <div key={i} className={`rounded-md px-4 py-2 font-bold ${i === team ? "brass-plate" : "btn-dark"}`}>{teamName(i)}: {scores[i]}</div>
-      ))}
     >
-      <div className="grid items-center gap-10 md:grid-cols-[1fr_auto]">
-        <div className="flex flex-col items-center gap-6">
-          <p className="text-xl font-bold text-ivory">{t("turn", { name: teamName(team) })}</p>
+      <div className="slate-board mx-auto mb-5 grid max-w-xl grid-cols-2 gap-px overflow-hidden rounded-lg border-4 border-[color:var(--wood,oklch(0.35_0.06_50))] font-chalk text-chalk">
+        {[0, 1].map((i) => (
+          <div key={i} className={`px-3 py-2 text-center ${i === team ? "bg-chalk/10" : ""}`}>
+            <p className="truncate text-lg sm:text-xl">{teamName(i)}</p>
+            <p className="text-3xl leading-none sm:text-4xl">{scores[i]}</p>
+          </div>
+        ))}
+      </div>
+      <div className="grid items-center gap-6 sm:gap-10 md:grid-cols-[1fr_auto]">
+        <div className="flex flex-col items-center gap-4 sm:gap-6">
+          <p className="engraved font-display text-lg font-bold text-ivory sm:text-xl">{t("turn", { name: teamName(team) })}</p>
           {running ? (
             <div
               key={idx}
-              className={`paper animate-deal w-full max-w-sm overflow-hidden rounded-2xl ${flash === "bad" ? "animate-shake" : ""}`}
+              className={`paper animate-deal w-full max-w-sm overflow-hidden rounded-md shadow-[var(--shadow-object)] ${flash === "bad" ? "animate-shake" : ""}`}
               style={{ transform: `rotate(${(idx % 3) - 1}deg)` }}
             >
-              <div className="btn-red px-6 py-6 text-center">
-                <h2 className="text-4xl font-black uppercase tracking-wide">{card.word}</h2>
+              <div className="border-b-4 border-double border-chip-red/60 px-6 py-5 text-center">
+                <h2 className="font-display text-3xl font-black uppercase tracking-wide text-chip-red sm:text-4xl">{card.word}</h2>
               </div>
               <div className="px-6 py-5">
                 <p className="mb-2 text-center text-xs font-bold uppercase tracking-[0.3em] text-ink/50">{t("forbidden")}</p>
@@ -99,8 +104,8 @@ function Taboo() {
               </div>
             </div>
           ) : (
-            <div className="card-back grid h-80 w-full max-w-sm place-items-center rounded-2xl">
-              <div className="paper rounded-xl px-6 py-4 text-center">
+            <div className="wood grid min-h-72 w-full max-w-sm place-items-center rounded-md p-4 shadow-[var(--shadow-object)]">
+              <div className="paper rounded-sm px-6 py-4 text-center">
                 {time <= 0 ? (
                   <>
                     <p className="text-2xl font-black text-chip-red">{t("timeUp")}</p>
@@ -123,10 +128,10 @@ function Taboo() {
             </div>
           )}
           {running && (
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="grid w-full max-w-sm grid-cols-3 gap-2">
               <button className="btn-real btn-red" onClick={() => next(-1, "bad")}>{t("taboo")}</button>
               <button className="btn-real btn-dark" disabled={skips <= 0} onClick={() => next(0, "skip")}>{t("skip")} · {skips}</button>
-              <button className="btn-real px-8" onClick={() => next(1, "ok")}>{t("correct")}</button>
+              <button className="btn-real" onClick={() => next(1, "ok")}>{t("correct")}</button>
             </div>
           )}
           {flash === "ok" && <Banner>+1</Banner>}
@@ -135,7 +140,7 @@ function Taboo() {
         {/* Hourglass */}
         <div className="mx-auto flex flex-col items-center gap-2">
           <div className="wood h-4 w-32 rounded-sm shadow-[var(--shadow-object)]" />
-          <div className="relative h-56 w-24">
+          <div className="relative h-32 w-16 sm:h-56 sm:w-24">
             <div className="absolute inset-x-0 top-0 h-1/2 overflow-hidden" style={{ clipPath: "polygon(0 0, 100% 0, 55% 100%, 45% 100%)", background: "oklch(1 0 0 / 0.15)" }}>
               <div className="absolute inset-x-0 bottom-0 bg-brass transition-all duration-1000 ease-linear" style={{ height: `${pct * 100}%` }} />
             </div>
