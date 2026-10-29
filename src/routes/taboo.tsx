@@ -61,7 +61,7 @@ function Taboo() {
     setIdx((i) => i + 1);
     setFlash(kind === "skip" ? null : kind);
     setTimeout(() => setFlash(null), 400);
-    if (kind === "ok") sfx.ding(); else if (kind === "bad") sfx.buzzer(); else sfx.card();
+    if (kind === "ok") sfx.ding(); else sfx.card();
   };
 
   const start = () => { setHandoff(null); setTime(ROUND); setRoundScore(0); setSkips(3); setRunning(true); sfx.click(); };

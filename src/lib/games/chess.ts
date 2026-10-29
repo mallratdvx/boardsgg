@@ -113,3 +113,49 @@ export function status(s: State): "play" | "check" | "mate" | "stalemate" {
   if (!any) return chk ? "mate" : "stalemate";
   return chk ? "check" : "play";
 }
+
+const VAL: Record<Piece["t"], number> = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
+const center = (i: number) => { const r = i >> 3, f = i & 7; return 14 - (Math.abs(3.5 - r) + Math.abs(3.5 - f)) * 4; };
+function evaluate(s: State): number {
+  let v = 0;
+  s.board.forEach((p, i) => {
+    if (!p) return;
+    let x = VAL[p.t] + (p.t === "n" || p.t === "b" || p.t === "p" ? center(i) : 0);
+    if (p.t === "p") x += (p.c === "w" ? 6 - (i >> 3) : (i >> 3) - 1) * 6;
+    v += p.c === "w" ? x : -x;
+  });
+  return v;
+}
+export function allMoves(s: State): Move[] {
+  const out: Move[] = [];
+  s.board.forEach((p, i) => { if (p?.c === s.turn) for (const to of legalFrom(s, i)) out.push({ from: i, to }); });
+  return out;
+}
+function search(s: State, d: number, a: number, b: number): number {
+  const ms = allMoves(s);
+  if (!ms.length) return inCheck(s) ? (s.turn === "w" ? -99999 - d : 99999 + d) : 0;
+  if (d === 0) return evaluate(s);
+  ms.sort((x, y) => (s.board[y.to] ? 1 : 0) - (s.board[x.to] ? 1 : 0));
+  if (s.turn === "w") {
+    let best = -Infinity;
+    for (const m of ms) { best = Math.max(best, search(apply(s, m), d - 1, a, b)); a = Math.max(a, best); if (a >= b) break; }
+    return best;
+  }
+  let best = Infinity;
+  for (const m of ms) { best = Math.min(best, search(apply(s, m), d - 1, a, b)); b = Math.min(b, best); if (a >= b) break; }
+  return best;
+}
+/** level 1 = apprentice (random-ish), 2 = parlor, 3 = master */
+export function botMove(s: State, level: 1 | 2 | 3 = 2): Move | null {
+  const ms = allMoves(s);
+  if (!ms.length) return null;
+  const depth = level === 1 ? 1 : level === 2 ? 2 : 3;
+  const noise = level === 1 ? 120 : level === 2 ? 15 : 0;
+  const sign = s.turn === "w" ? 1 : -1;
+  let best: Move = ms[0]!, bv = -Infinity;
+  for (const m of ms) {
+    const v = sign * search(apply(s, m), depth - 1, -Infinity, Infinity) + Math.random() * noise;
+    if (v > bv) { bv = v; best = m; }
+  }
+  return best;
+}

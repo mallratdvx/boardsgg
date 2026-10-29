@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Banner, GameLayout } from "@/components/GameLayout";
 import { useApp } from "@/lib/i18n/context";
-import { apply, initial, legalFrom, status, type Color, type Piece, type State } from "@/lib/games/chess";
+import { apply, botMove, initial, legalFrom, status, type Color, type Piece, type State } from "@/lib/games/chess";
 import { sfx } from "@/lib/sound";
 import { celebrate } from "@/lib/celebrate";
 
@@ -27,7 +27,7 @@ function Man({ p }: { p: Piece }) {
   const w = p.c === "w";
   return (
     <span
-      className="pointer-events-none select-none text-[min(10vw,3.4rem)] leading-none"
+      className="pointer-events-none absolute inset-0 grid select-none place-items-center text-[min(9vw,3.2rem)] leading-none"
       style={{
         fontFamily: "'Segoe UI Symbol','DejaVu Sans',serif",
         color: w ? "oklch(0.88 0.07 80)" : "oklch(0.32 0.08 30)",
@@ -51,6 +51,7 @@ function Chess() {
   const [sel, setSel] = useState<number | null>(null);
   const [clock, setClock] = useState({ w: 300, b: 300 });
   const [running, setRunning] = useState(false);
+  const [bot, setBot] = useState<0 | 1 | 2 | 3>(2);
   const [last, setLast] = useState<[number, number] | null>(null);
   const st = status(s);
   const flagged: Color | null = clock.w <= 0 ? "w" : clock.b <= 0 ? "b" : null;
@@ -64,53 +65,75 @@ function Chess() {
   }, [running, over, s.turn]);
 
   const reset = (m = mins) => { setMins(m); setS(initial()); setSel(null); setLast(null); setClock({ w: m * 60, b: m * 60 }); setRunning(false); sfx.click(); };
+  const doMove = (from: number, to: number, cur: State) => {
+    const capture = !!cur.board[to];
+    const n = apply(cur, { from, to });
+    setS(n); setSel(null); setLast([from, to]); setRunning(true);
+    if (capture) sfx.thud(); else sfx.chip();
+    sfx.clock();
+    const ns = status(n);
+    if (ns === "mate") { sfx.jackpot(); void celebrate(true); } else if (ns === "check") sfx.ding();
+  };
+
+  useEffect(() => {
+    if (!bot || s.turn !== "b" || over) return;
+    const id = setTimeout(() => { const m = botMove(s, bot); if (m) doMove(m.from, m.to, s); }, 450 + Math.random() * 300);
+    return () => clearTimeout(id);
+  }, [s, bot, over]);
+
+  const rock = (c: Color) => {
+    if (over) return;
+    sfx.clock();
+    if (!running) setRunning(true);
+    else if (s.turn === c) setRunning(false);
+  };
+
   const moves = sel !== null ? legalFrom(s, sel) : [];
 
   const tap = (i: number) => {
-    if (over) return;
-    if (sel !== null && moves.includes(i)) {
-      const capture = !!s.board[i];
-      const n = apply(s, { from: sel, to: i });
-      setS(n); setSel(null); setLast([sel, i]); setRunning(true);
-      if (capture) sfx.thud(); else sfx.chip();
-      sfx.clock();
-      const ns = status(n);
-      if (ns === "mate") { sfx.jackpot(); void celebrate(true); } else if (ns === "check") sfx.ding();
-      return;
-    }
+    if (over || (bot && s.turn === "b")) return;
+    if (sel !== null && moves.includes(i)) { doMove(sel, i, s); return; }
     if (s.board[i]?.c === s.turn) { setSel(i); sfx.click(); } else setSel(null);
   };
 
   const Face = ({ c }: { c: Color }) => {
     const active = running && s.turn === c && !over;
     return (
-      <div className="flex flex-col items-center gap-2">
+      <button type="button" onClick={() => rock(c)} aria-label={`clock ${nm(c)}`} className="flex cursor-pointer flex-col items-center gap-2 active:scale-95">
         <div className={`h-4 w-20 rounded-t-md transition-transform duration-150 ${active ? "translate-y-0 bg-chip-red" : "translate-y-2 bg-brass"}`} style={{ boxShadow: "inset 0 2px 0 oklch(1 0 0 / 0.4), 0 3px 0 oklch(0 0 0 / 0.5)" }} />
         <div className="paper grid h-20 w-24 place-items-center rounded-full font-mono text-2xl font-black" style={{ boxShadow: "inset 0 3px 8px oklch(0 0 0 / 0.5), 0 0 0 4px var(--brass)" }}>
           <span className={clock[c] <= 30 ? "text-chip-red" : ""}>{fmt(clock[c])}</span>
         </div>
         <span className="text-xs font-bold uppercase text-ivory/80">{nm(c)}</span>
-      </div>
+      </button>
     );
   };
 
   return (
     <GameLayout
       title="g_chess"
-      actions={[3, 5, 10].map((m) => (
-        <button key={m} className={`btn-real ${mins === m ? "" : "btn-dark"}`} onClick={() => reset(m)}>{t("minutes", { n: m })}</button>
-      ))}
+      actions={<>
+        {[3, 5, 10].map((m) => (
+          <button key={m} className={`btn-real ${mins === m ? "" : "btn-dark"}`} onClick={() => reset(m)}>{t("minutes", { n: m })}</button>
+        ))}
+        <select aria-label="Opponent" className="btn-real btn-dark" value={bot} onChange={(e) => { setBot(Number(e.target.value) as 0 | 1 | 2 | 3); reset(); }}>
+          <option value={0}>Pass &amp; Play</option>
+          <option value={1}>Bot · Apprentice</option>
+          <option value={2}>Bot · Parlor</option>
+          <option value={3}>Bot · Master</option>
+        </select>
+      </>}
     >
       <div className="grid items-start gap-6 lg:grid-cols-[1fr_260px]">
         <div className="wood mx-auto w-full max-w-[640px] rounded-lg p-3 md:p-5" style={{ boxShadow: "var(--shadow-object)" }}>
-          <div className="grid aspect-square grid-cols-8 overflow-hidden rounded-sm" style={{ boxShadow: "inset 0 0 0 2px var(--brass)" }}>
+          <div className="grid aspect-square w-full overflow-hidden rounded-sm"  style={{ gridTemplateColumns: "repeat(8, minmax(0, 1fr))", gridTemplateRows: "repeat(8, minmax(0, 1fr))", boxShadow: "inset 0 0 0 2px var(--brass)" }}>
             {s.board.map((p, i) => {
               const dark = ((i >> 3) + (i & 7)) % 2 === 1;
               const target = moves.includes(i);
               const isLast = last?.includes(i);
               return (
                 <button key={i} onClick={() => tap(i)} aria-label={`square ${i}`}
-                  className="relative grid place-items-center"
+                  className="relative min-h-0 min-w-0 overflow-hidden"
                   style={{ background: dark ? "linear-gradient(135deg, oklch(0.42 0.08 45), oklch(0.36 0.07 40))" : "linear-gradient(135deg, oklch(0.84 0.06 80), oklch(0.78 0.06 75))" }}>
                   {isLast && <span className="absolute inset-0 bg-brass/30" />}
                   {sel === i && <span className="absolute inset-0 ring-4 ring-inset ring-brass" />}
