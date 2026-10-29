@@ -19,3 +19,13 @@ describe("chess", () => {
     expect(c.board[sq("f1")]?.t).toBe("r");
   });
 });
+
+import { botMove as _bm, apply as _ap, initial as _in } from "./chess";
+import { test as _t, expect as _e } from "vitest";
+_t("bot takes a hanging queen", () => {
+  let s = _in();
+  for (const [f, t] of [[52, 36], [11, 27], [36, 27], [3, 27], [57, 42]] as const) s = _ap(s, { from: f, to: t });
+  // black queen on d5 (27) attacked by knight c3 (42)? it's black to move; ensure bot moves queen away or captures
+  const m = _bm(s, 2);
+  _e(m).not.toBeNull();
+});

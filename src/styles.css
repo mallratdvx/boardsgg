@@ -248,3 +248,10 @@
 @utility animate-glow { animation: glow 1.2s ease-in-out infinite; }
 @utility animate-shake { animation: shake 0.3s ease-in-out 2; }
 @utility animate-flipin { animation: flipin 0.3s ease-out both; }
+
+@keyframes pageturn {
+  0% { transform: rotateX(0deg); box-shadow: 0 0 0 transparent; }
+  45% { transform: rotateX(-88deg); box-shadow: 0 30px 40px oklch(0 0 0 / 0.5); }
+  55% { transform: rotateX(-88deg); }
+  100% { transform: rotateX(0deg); box-shadow: 0 0 0 transparent; }
+}
