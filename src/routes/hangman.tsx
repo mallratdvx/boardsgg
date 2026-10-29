@@ -31,7 +31,7 @@ const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const MAX = 7;
 
 function Gallows({ miss, chalk }: { miss: number; chalk: boolean }) {
-  const stroke = chalk ? "var(--chalk, oklch(0.95 0.01 90))" : "oklch(0.35 0.12 260)";
+  const stroke = chalk ? "var(--chalk, oklch(0.95 0.01 90))" : "oklch(0.28 0.02 260)";
   const parts = [
     <path key="b" d="M20 190 H120 M50 190 V20 H130 V40" />,
     <circle key="h" cx="130" cy="58" r="18" />,
@@ -100,14 +100,14 @@ function Hangman() {
       <div style={{ perspective: 1400 }}>
         <div
           key={flip}
-          className={`${chalk ? "slate-board text-chalk" : "paper"} mx-auto flex max-w-2xl flex-col items-center gap-5 rounded-xl p-5 md:p-8 ${flip ? "animate-[pageturn_0.7s_cubic-bezier(0.4,0,0.2,1)]" : ""}`}
-          style={{ transformOrigin: "top center", ...(chalk ? {} : { backgroundImage: "repeating-linear-gradient(transparent 0 31px, oklch(0.7 0.06 240 / 0.35) 31px 32px)" }) }}
+          className={`${chalk ? "slate-board text-chalk" : "sketchpad text-ink"} mx-auto flex max-w-2xl flex-col items-center gap-5 rounded-xl p-5 md:p-8 ${flip ? "animate-[pageturn_0.7s_cubic-bezier(0.4,0,0.2,1)]" : ""}`}
+          style={{ transformOrigin: "top center" }}
         >
           <Gallows miss={miss} chalk={chalk} />
           <p className="text-sm opacity-80">{t("guessesLeft", { n: MAX - miss })}</p>
           <div className="flex flex-wrap justify-center gap-2">
             {word.split("").map((c, i) => (
-              <span key={i} className={`grid h-12 w-9 place-items-end justify-center border-b-4 pb-1 font-chalk text-4xl ${chalk ? "border-chalk/70" : "border-ink/60"}`}>
+              <span key={i} className={`grid h-12 w-9 place-items-end justify-center border-b-4 pb-1 ${chalk ? "font-chalk" : "font-[Caveat]"} text-4xl ${chalk ? "border-chalk/70" : "border-ink/60"}`}>
                 {guessed.includes(c) || lost ? <span className={`animate-pop ${!guessed.includes(c) ? "text-chip-red" : ""}`}>{c}</span> : ""}
               </span>
             ))}
@@ -121,8 +121,8 @@ function Hangman() {
               const used = guessed.includes(c), hit = used && word.includes(c);
               return (
                 <button key={c} onClick={() => guess(c)} disabled={used || won || lost}
-                  className={`wood h-11 w-11 rounded-md font-display text-lg font-black text-ivory transition active:translate-y-0.5 disabled:opacity-40 ${hit ? "ring-2 ring-chip-green" : used ? "ring-2 ring-chip-red" : ""}`}
-                  style={{ boxShadow: "inset 0 1px 0 oklch(1 0 0 / 0.3), 0 3px 0 oklch(0 0 0 / 0.5)" }}>
+                  className={`${chalk ? "wood text-ivory" : "paper-key text-ink"} h-11 w-11 rounded-md font-display text-lg font-black transition active:translate-y-0.5 disabled:opacity-40 ${hit ? "ring-2 ring-chip-green" : used ? "ring-2 ring-chip-red" : ""}`}
+                  style={chalk ? { boxShadow: "inset 0 1px 0 oklch(1 0 0 / 0.3), 0 3px 0 oklch(0 0 0 / 0.5)" } : undefined}>
                   {c}
                 </button>
               );
