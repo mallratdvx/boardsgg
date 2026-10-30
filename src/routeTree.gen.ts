@@ -16,6 +16,7 @@ import { Route as ConnectFourRouteImport } from './routes/connect-four'
 import { Route as HangmanRouteImport } from './routes/hangman'
 import { Route as IslandRouteImport } from './routes/island'
 import { Route as MemoryRouteImport } from './routes/memory'
+import { Route as PoolRouteImport } from './routes/pool'
 import { Route as RouletteRouteImport } from './routes/roulette'
 import { Route as SlotsRouteImport } from './routes/slots'
 import { Route as TabooRouteImport } from './routes/taboo'
@@ -57,6 +58,11 @@ const MemoryRoute = MemoryRouteImport.update({
   path: '/memory',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoolRoute = PoolRouteImport.update({
+  id: '/pool',
+  path: '/pool',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RouletteRoute = RouletteRouteImport.update({
   id: '/roulette',
   path: '/roulette',
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/hangman': typeof HangmanRoute
   '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
+  '/pool': typeof PoolRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
   '/taboo': typeof TabooRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/hangman': typeof HangmanRoute
   '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
+  '/pool': typeof PoolRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
   '/taboo': typeof TabooRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/hangman': typeof HangmanRoute
   '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
+  '/pool': typeof PoolRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
   '/taboo': typeof TabooRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/hangman'
     | '/island'
     | '/memory'
+    | '/pool'
     | '/roulette'
     | '/slots'
     | '/taboo'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/hangman'
     | '/island'
     | '/memory'
+    | '/pool'
     | '/roulette'
     | '/slots'
     | '/taboo'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/hangman'
     | '/island'
     | '/memory'
+    | '/pool'
     | '/roulette'
     | '/slots'
     | '/taboo'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   HangmanRoute: typeof HangmanRoute
   IslandRoute: typeof IslandRoute
   MemoryRoute: typeof MemoryRoute
+  PoolRoute: typeof PoolRoute
   RouletteRoute: typeof RouletteRoute
   SlotsRoute: typeof SlotsRoute
   TabooRoute: typeof TabooRoute
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MemoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pool': {
+      id: '/pool'
+      path: '/pool'
+      fullPath: '/pool'
+      preLoaderRoute: typeof PoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/roulette': {
       id: '/roulette'
       path: '/roulette'
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   HangmanRoute: HangmanRoute,
   IslandRoute: IslandRoute,
   MemoryRoute: MemoryRoute,
+  PoolRoute: PoolRoute,
   RouletteRoute: RouletteRoute,
   SlotsRoute: SlotsRoute,
   TabooRoute: TabooRoute,

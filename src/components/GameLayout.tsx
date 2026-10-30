@@ -7,8 +7,8 @@ import type { TKey } from "@/lib/i18n/context";
 export function GameLayout({ title, children, actions }: { title: TKey; children: ReactNode; actions?: ReactNode }) {
   const { t } = useApp();
   return (
-    <main className="mx-auto max-w-6xl px-4 py-6">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <main className="mx-auto max-w-6xl px-2 py-3 sm:px-4 sm:py-6">
+      <div className="mb-3 sm:mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-4">
           <Link to="/" className="btn-real btn-dark !px-3" aria-label={t("back")}>
             <ArrowLeft className="h-5 w-5" />
