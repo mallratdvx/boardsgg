@@ -7,7 +7,7 @@ import { sfx } from "@/lib/sound";
 const GLYPH = { grid: Grid3x3, disc: CircleDot, dice: Dices, map: MapIcon, hush: MessageSquareOff, photo: Images, spade: Spade, wheel: Disc3, reel: Cherry, king: Castle, pencil: PenLine, cue: Target } as const;
 function TrayGlyph({ icon }: { icon: TrayIcon }) {
   const I = GLYPH[icon];
-  return <I className="h-8 w-8 drop-shadow-[0_2px_1px_oklch(0_0_0/0.7)]" strokeWidth={2.2} />;
+  return <I className="h-10 w-10 drop-shadow-[0_1px_0_oklch(1_0_0/0.5)]" strokeWidth={2.2} />;
 }
 
 export const Route = createFileRoute("/")({
