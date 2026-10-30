@@ -282,3 +282,32 @@
   border: 1px solid oklch(0.75 0.03 80);
   box-shadow: 0 2px 0 oklch(0.7 0.03 80), 0 3px 4px oklch(0 0 0 / 0.2);
 }
+
+/* ---------- Embedded bezel hardware ---------- */
+.bezel-rail {
+  background: linear-gradient(180deg, oklch(0.42 0.08 50), oklch(0.3 0.06 45));
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.18), 0 2px 4px oklch(0 0 0 / 0.4);
+}
+.bezel-well {
+  background: oklch(0.16 0.02 45);
+  box-shadow: inset 0 2px 4px oklch(0 0 0 / 0.7), inset 0 -1px 0 oklch(0 0 0 / 0.4), 0 1px 0 oklch(1 0 0 / 0.15);
+}
+.resin-pill {
+  background: radial-gradient(circle at 35% 25%, oklch(0.9 0.12 80), oklch(0.68 0.16 60) 60%, oklch(0.5 0.13 50));
+  box-shadow: inset 0 1px 1px oklch(1 0 0 / 0.6), inset 0 -2px 2px oklch(0 0 0 / 0.25), 0 2px 3px oklch(0 0 0 / 0.5);
+}
+.bezel-icon-on { color: oklch(0.25 0.05 50); }
+.bezel-icon-off { color: oklch(0.6 0.03 60); }
+.rocker-key {
+  color: oklch(0.65 0.03 60);
+  background: linear-gradient(180deg, oklch(0.36 0.02 50), oklch(0.26 0.02 50));
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.15), 0 2px 0 oklch(0 0 0 / 0.6);
+  transition: transform 0.12s, box-shadow 0.12s, color 0.2s;
+}
+.rocker-on {
+  color: oklch(0.85 0.12 80);
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 3px oklch(0 0 0 / 0.6);
+}
+.jewel { background: oklch(0.35 0.05 60); }
+.jewel-on { background: oklch(0.85 0.17 75); box-shadow: 0 0 6px 1px oklch(0.8 0.18 70 / 0.8); }
