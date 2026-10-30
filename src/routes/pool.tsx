@@ -193,7 +193,7 @@ function Pool() {
     const cue = balls.current[0]!;
     const dx = cue.x - p.x, dy = cue.y - p.y, d = Math.min(Math.hypot(dx, dy), 220);
     if (d < 10) return;
-    const power = (d / 220) * 38;
+    const power = (d / 220) * 52;
     cue.vx = (dx / Math.hypot(dx, dy)) * power; cue.vy = (dy / Math.hypot(dx, dy)) * power;
     shot.current = { potted: [], firstHit: null };
     moving.current = true; sfx.thud();
