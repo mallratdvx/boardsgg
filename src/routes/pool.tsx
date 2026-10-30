@@ -49,7 +49,7 @@ function Pool() {
   const [over, setOver] = useState<string | null>(null);
   const state = useRef({ turn, groups, over });
   state.current = { turn, groups, over };
-  const name = (i: number) => t("player", { n: i + 1 });
+  const name = (i: number) => t("playerN", { n: i + 1 });
 
   const endShot = () => {
     const { turn: tr, groups: gs } = state.current;
