@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Banner, GameLayout } from "@/components/GameLayout";
+import { BezelRail, PlayerRocker, SurfaceSlider } from "@/components/BezelControls";
 import { useApp } from "@/lib/i18n/context";
 import { tttBestMove, tttWinner, type Mark } from "@/lib/games/logic";
 import { sfx } from "@/lib/sound";
@@ -56,23 +57,20 @@ function TicTacToe() {
   const name = (m: "X" | "O") => (vsAi ? (m === "X" ? t("you") : t("computer")) : m);
 
   return (
-    <GameLayout
-      title="g_tictactoe"
-      actions={
-        <>
-          <button className={`btn-real ${vsAi ? "" : "btn-dark"}`} onClick={() => { setVsAi(true); reset(); }}>{t("vsComputer")}</button>
-          <button className={`btn-real ${!vsAi ? "" : "btn-dark"}`} onClick={() => { setVsAi(false); reset(); }}>{t("twoPlayers")}</button>
-          <button className="btn-real btn-dark" onClick={() => { setChalk(!chalk); sfx.click(); }}>{chalk ? "Sketchpad" : "Slate"}</button>
-        </>
-      }
-    >
+    <GameLayout title="g_tictactoe">
       <div className="mb-6 h-12">
         {win ? <Banner>{t("wins", { name: name(win.mark!) })}</Banner> : full ? <Banner tone="red">{t("draw")}</Banner> : (
           <p className="text-center font-chalk text-3xl text-ivory">{t("turn", { name: name(turn) })}</p>
         )}
       </div>
+      <div className="mx-auto w-full max-w-md">
+        <BezelRail>
+          <PlayerRocker two={!vsAi} labels={[t("vsComputer"), t("twoPlayers")]} onChange={(two) => { setVsAi(!two); reset(); }} />
+          <SurfaceSlider chalk={chalk} onChange={setChalk} />
+        </BezelRail>
+      </div>
       <div style={{ perspective: 1400 }}>
-      <div key={flip} className={`${chalk ? "slate-board" : "sketchpad"} mx-auto grid aspect-square w-full max-w-md rounded-md p-4 ${flip ? "animate-[pageturn_0.6s_cubic-bezier(0.4,0,0.2,1)]" : ""}`}
+      <div key={flip} className={`${chalk ? "slate-board" : "sketchpad"} mx-auto grid aspect-square w-full max-w-md rounded-b-md p-4 ${flip ? "animate-[pageturn_0.6s_cubic-bezier(0.4,0,0.2,1)]" : ""}`}
         style={{ transformOrigin: "top center", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gridTemplateRows: "repeat(3, minmax(0, 1fr))" }}>
         {board.map((m, i) => (
           <button
