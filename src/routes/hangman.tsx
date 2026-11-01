@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Banner, GameLayout } from "@/components/GameLayout";
+import { BezelRail, SurfaceSlider } from "@/components/BezelControls";
 import { useApp } from "@/lib/i18n/context";
 import type { Lang } from "@/lib/i18n/dict";
 import { sfx } from "@/lib/sound";
@@ -88,19 +89,17 @@ function Hangman() {
   const restart = () => { sfx.flip(); setFlip((f) => f + 1); setTimeout(newWord, 350); };
 
   return (
-    <GameLayout
-      title="g_hangman"
-      actions={
-        <div className="flex rounded-md bg-ink/60 p-1">
-          <button className={`btn-real !px-3 ${chalk ? "" : "btn-dark"}`} onClick={() => { setChalk(true); sfx.click(); }}>Slate</button>
-          <button className={`btn-real !px-3 ${!chalk ? "" : "btn-dark"}`} onClick={() => { setChalk(false); sfx.click(); }}>Sketchpad</button>
-        </div>
-      }
-    >
+    <GameLayout title="g_hangman">
+      <div className="mx-auto max-w-2xl">
+        <BezelRail>
+          <span className="font-display text-xs font-black tracking-widest text-brass">{t("guessesLeft", { n: MAX - miss })}</span>
+          <SurfaceSlider chalk={chalk} onChange={setChalk} />
+        </BezelRail>
+      </div>
       <div style={{ perspective: 1400 }}>
         <div
           key={flip}
-          className={`${chalk ? "slate-board text-chalk" : "sketchpad text-ink"} mx-auto flex max-w-2xl flex-col items-center gap-5 rounded-xl p-5 md:p-8 ${flip ? "animate-[pageturn_0.7s_cubic-bezier(0.4,0,0.2,1)]" : ""}`}
+          className={`${chalk ? "slate-board text-chalk" : "sketchpad text-ink"} mx-auto flex max-w-2xl flex-col items-center gap-5 rounded-b-xl p-5 md:p-8 ${flip ? "animate-[pageturn_0.7s_cubic-bezier(0.4,0,0.2,1)]" : ""}`}
           style={{ transformOrigin: "top center" }}
         >
           <Gallows miss={miss} chalk={chalk} />
