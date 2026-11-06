@@ -69,6 +69,10 @@ export const sfx = {
   slotWin: () => [523, 659, 784].forEach((f, i) => { tone(f, 0.18, "square", 0.08, i * 0.1); tone(f * 1.005, 0.18, "sawtooth", 0.05, i * 0.1); }),
   pageFlip: () => { noise(0.25, 0.25, 0, 3000); noise(0.12, 0.2, 0.18, 1800); },
   clock: () => { tone(800, 0.03, "square", 0.08); noise(0.05, 0.4, 0, 1200); },
+  dartThunk: () => { tone(110, 0.12, "sine", 0.35, 0, 50); noise(0.05, 0.5, 0, 900); },
+  barrel: () => { tone(160, 0.15, "triangle", 0.3, 0, 80); noise(0.04, 0.3, 0, 500); },
+  bell: () => { tone(1568, 0.6, "sine", 0.15); tone(2093, 0.5, "sine", 0.08, 0.02); },
+  flipper: () => { tone(220, 0.04, "square", 0.08); noise(0.03, 0.3, 0, 2000); },
   jackpot: () => {
     [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => { tone(f, 0.25, "square", 0.1, i * 0.1); tone(f * 1.01, 0.25, "sawtooth", 0.06, i * 0.1); });
     for (let i = 0; i < 14; i++) tone(2400 + Math.random() * 800, 0.06, "triangle", 0.06, 0.8 + i * 0.07);

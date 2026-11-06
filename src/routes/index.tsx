@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Castle, Cherry, CircleDot, Dices, Disc3, Grid3x3, Images, Map as MapIcon, MessageSquareOff, PenLine, Spade, Target } from "lucide-react";
+import { Castle, Cherry, CircleDot, Dices, Disc3, Grid3x3, Images, Map as MapIcon, MessageSquareOff, PenLine, Spade, Target, Crosshair, Beer } from "lucide-react";
 import { useApp } from "@/lib/i18n/context";
 import { GAMES, type TrayIcon } from "@/lib/games/registry";
 import { sfx } from "@/lib/sound";
 
-const GLYPH = { grid: Grid3x3, disc: CircleDot, dice: Dices, map: MapIcon, hush: MessageSquareOff, photo: Images, spade: Spade, wheel: Disc3, reel: Cherry, king: Castle, pencil: PenLine, cue: Target } as const;
+const GLYPH = { grid: Grid3x3, disc: CircleDot, dice: Dices, map: MapIcon, hush: MessageSquareOff, photo: Images, spade: Spade, wheel: Disc3, reel: Cherry, king: Castle, pencil: PenLine, cue: Target, dart: Crosshair, flipper: Beer } as const;
 function TrayGlyph({ icon }: { icon: TrayIcon }) {
   const I = GLYPH[icon];
   return <I className="h-10 w-10 drop-shadow-[0_1px_0_oklch(1_0_0/0.5)]" strokeWidth={2.2} />;

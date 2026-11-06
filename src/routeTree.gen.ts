@@ -13,9 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlackjackRouteImport } from './routes/blackjack'
 import { Route as ChessRouteImport } from './routes/chess'
 import { Route as ConnectFourRouteImport } from './routes/connect-four'
+import { Route as DartsRouteImport } from './routes/darts'
 import { Route as HangmanRouteImport } from './routes/hangman'
 import { Route as IslandRouteImport } from './routes/island'
 import { Route as MemoryRouteImport } from './routes/memory'
+import { Route as PinballRouteImport } from './routes/pinball'
 import { Route as PoolRouteImport } from './routes/pool'
 import { Route as RouletteRouteImport } from './routes/roulette'
 import { Route as SlotsRouteImport } from './routes/slots'
@@ -43,6 +45,11 @@ const ConnectFourRoute = ConnectFourRouteImport.update({
   path: '/connect-four',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DartsRoute = DartsRouteImport.update({
+  id: '/darts',
+  path: '/darts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HangmanRoute = HangmanRouteImport.update({
   id: '/hangman',
   path: '/hangman',
@@ -56,6 +63,11 @@ const IslandRoute = IslandRouteImport.update({
 const MemoryRoute = MemoryRouteImport.update({
   id: '/memory',
   path: '/memory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PinballRoute = PinballRouteImport.update({
+  id: '/pinball',
+  path: '/pinball',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PoolRoute = PoolRouteImport.update({
@@ -94,9 +106,11 @@ export interface FileRoutesByFullPath {
   '/blackjack': typeof BlackjackRoute
   '/chess': typeof ChessRoute
   '/connect-four': typeof ConnectFourRoute
+  '/darts': typeof DartsRoute
   '/hangman': typeof HangmanRoute
   '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
+  '/pinball': typeof PinballRoute
   '/pool': typeof PoolRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
@@ -109,9 +123,11 @@ export interface FileRoutesByTo {
   '/blackjack': typeof BlackjackRoute
   '/chess': typeof ChessRoute
   '/connect-four': typeof ConnectFourRoute
+  '/darts': typeof DartsRoute
   '/hangman': typeof HangmanRoute
   '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
+  '/pinball': typeof PinballRoute
   '/pool': typeof PoolRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
@@ -125,9 +141,11 @@ export interface FileRoutesById {
   '/blackjack': typeof BlackjackRoute
   '/chess': typeof ChessRoute
   '/connect-four': typeof ConnectFourRoute
+  '/darts': typeof DartsRoute
   '/hangman': typeof HangmanRoute
   '/island': typeof IslandRoute
   '/memory': typeof MemoryRoute
+  '/pinball': typeof PinballRoute
   '/pool': typeof PoolRoute
   '/roulette': typeof RouletteRoute
   '/slots': typeof SlotsRoute
@@ -142,9 +160,11 @@ export interface FileRouteTypes {
     | '/blackjack'
     | '/chess'
     | '/connect-four'
+    | '/darts'
     | '/hangman'
     | '/island'
     | '/memory'
+    | '/pinball'
     | '/pool'
     | '/roulette'
     | '/slots'
@@ -157,9 +177,11 @@ export interface FileRouteTypes {
     | '/blackjack'
     | '/chess'
     | '/connect-four'
+    | '/darts'
     | '/hangman'
     | '/island'
     | '/memory'
+    | '/pinball'
     | '/pool'
     | '/roulette'
     | '/slots'
@@ -172,9 +194,11 @@ export interface FileRouteTypes {
     | '/blackjack'
     | '/chess'
     | '/connect-four'
+    | '/darts'
     | '/hangman'
     | '/island'
     | '/memory'
+    | '/pinball'
     | '/pool'
     | '/roulette'
     | '/slots'
@@ -188,9 +212,11 @@ export interface RootRouteChildren {
   BlackjackRoute: typeof BlackjackRoute
   ChessRoute: typeof ChessRoute
   ConnectFourRoute: typeof ConnectFourRoute
+  DartsRoute: typeof DartsRoute
   HangmanRoute: typeof HangmanRoute
   IslandRoute: typeof IslandRoute
   MemoryRoute: typeof MemoryRoute
+  PinballRoute: typeof PinballRoute
   PoolRoute: typeof PoolRoute
   RouletteRoute: typeof RouletteRoute
   SlotsRoute: typeof SlotsRoute
@@ -229,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnectFourRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/darts': {
+      id: '/darts'
+      path: '/darts'
+      fullPath: '/darts'
+      preLoaderRoute: typeof DartsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hangman': {
       id: '/hangman'
       path: '/hangman'
@@ -248,6 +281,13 @@ declare module '@tanstack/react-router' {
       path: '/memory'
       fullPath: '/memory'
       preLoaderRoute: typeof MemoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pinball': {
+      id: '/pinball'
+      path: '/pinball'
+      fullPath: '/pinball'
+      preLoaderRoute: typeof PinballRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pool': {
@@ -300,9 +340,11 @@ const rootRouteChildren: RootRouteChildren = {
   BlackjackRoute: BlackjackRoute,
   ChessRoute: ChessRoute,
   ConnectFourRoute: ConnectFourRoute,
+  DartsRoute: DartsRoute,
   HangmanRoute: HangmanRoute,
   IslandRoute: IslandRoute,
   MemoryRoute: MemoryRoute,
+  PinballRoute: PinballRoute,
   PoolRoute: PoolRoute,
   RouletteRoute: RouletteRoute,
   SlotsRoute: SlotsRoute,

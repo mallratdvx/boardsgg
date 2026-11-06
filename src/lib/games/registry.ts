@@ -1,6 +1,6 @@
 import type { TKey } from "@/lib/i18n/context";
 
-export type TrayIcon = "grid" | "disc" | "dice" | "map" | "hush" | "photo" | "spade" | "wheel" | "reel" | "king" | "pencil" | "cue";
+export type TrayIcon = "grid" | "disc" | "dice" | "map" | "hush" | "photo" | "spade" | "wheel" | "reel" | "king" | "pencil" | "cue" | "dart" | "flipper";
 
 export const GAMES = [
   { to: "/tic-tac-toe", name: "g_tictactoe", desc: "d_tictactoe", icon: "grid", box: "slate" },
@@ -14,5 +14,7 @@ export const GAMES = [
   { to: "/slots", name: "g_slots", desc: "d_slots", icon: "reel", box: "red" },
   { to: "/chess", name: "g_chess", desc: "d_chess", icon: "king", box: "slate" },
   { to: "/pool", name: "g_pool", desc: "d_pool", icon: "cue", box: "felt" },
+  { to: "/darts", name: "g_darts", desc: "d_darts", icon: "dart", box: "red" },
+  { to: "/pinball", name: "g_pinball", desc: "d_pinball", icon: "flipper", box: "slate" },
   { to: "/hangman", name: "g_hangman", desc: "d_hangman", icon: "pencil", box: "ivory" },
 ] as const satisfies readonly { to: string; name: TKey; desc: TKey; icon: TrayIcon; box: string }[];
