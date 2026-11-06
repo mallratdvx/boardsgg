@@ -167,6 +167,30 @@ function Pool() {
       ctx.setLineDash([6, 8]); ctx.strokeStyle = "rgba(255,255,255,0.5)"; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(cue.x, cue.y); ctx.lineTo(cue.x + Math.cos(a) * 600, cue.y + Math.sin(a) * 600); ctx.stroke();
       ctx.setLineDash([]);
+      // ghost ball: first object ball along the aim ray
+      const ux = Math.cos(a), uy = Math.sin(a);
+      let best = Infinity, hit: Ball | null = null;
+      for (const b of balls.current) {
+        if (b.in || b.n === 0) continue;
+        const ox = b.x - cue.x, oy = b.y - cue.y, proj = ox * ux + oy * uy;
+        if (proj <= 0) continue;
+        const perp2 = ox * ox + oy * oy - proj * proj, r2 = 4 * R * R;
+        if (perp2 > r2) continue;
+        const t0 = proj - Math.sqrt(r2 - perp2);
+        if (t0 < best) { best = t0; hit = b; }
+      }
+      if (hit) {
+        const gx = cue.x + ux * best, gy = cue.y + uy * best;
+        ctx.strokeStyle = "rgba(255,255,255,0.8)"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(gx, gy, R, 0, Math.PI * 2); ctx.stroke();
+        const nx = hit.x - gx, ny = hit.y - gy, nl = Math.hypot(nx, ny) || 1;
+        ctx.strokeStyle = "rgba(240,210,120,0.85)";
+        ctx.beginPath(); ctx.moveTo(hit.x, hit.y); ctx.lineTo(hit.x + (nx / nl) * 140, hit.y + (ny / nl) * 140); ctx.stroke();
+      }
+      // power gauge
+      ctx.fillStyle = "rgba(0,0,0,0.45)"; ctx.fillRect(W - 22, H * 0.3, 12, H * 0.4);
+      ctx.fillStyle = d < 10 ? "rgba(200,200,200,0.6)" : "#d9a441";
+      ctx.fillRect(W - 22, H * 0.7 - (d / 220) * H * 0.4, 12, (d / 220) * H * 0.4);
       // cue stick
       const s0 = R + 6 + d * 0.5, s1 = s0 + 380;
       const x0 = cue.x - Math.cos(a) * s0, y0 = cue.y - Math.sin(a) * s0, x1 = cue.x - Math.cos(a) * s1, y1 = cue.y - Math.sin(a) * s1;
@@ -210,7 +234,7 @@ function Pool() {
         ))}
       </div>
       <div className="mb-3 min-h-10">{over ? <Banner>{over}</Banner> : msg ? <Banner tone="red">{msg}</Banner> : <p className="text-center text-sm text-muted-foreground">{t("poolTurn", { name: name(turn) })} — {t("aimHint")}</p>}</div>
-      <div className="wood mx-auto w-full max-w-[min(100%,46vh)] rounded-2xl p-[4%] max-sm:-mx-4 max-sm:w-screen max-sm:max-w-none max-sm:rounded-none" style={{ boxShadow: "var(--shadow-object), inset 0 2px 0 oklch(1 0 0 / 0.2)" }}>
+      <div className="wood mx-auto w-full max-w-[min(100%,calc((100dvh-190px)/2.1))] rounded-2xl p-[4%] max-sm:-mx-4 max-sm:w-screen max-sm:max-w-none max-sm:rounded-none" style={{ boxShadow: "var(--shadow-object), inset 0 2px 0 oklch(1 0 0 / 0.2)" }}>
         <canvas
           ref={canvas}
           width={W}
